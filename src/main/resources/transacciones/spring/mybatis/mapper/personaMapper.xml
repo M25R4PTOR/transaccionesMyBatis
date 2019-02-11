@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="transacciones.spring.mybatis.mapper.PersonaMapper">
+
+	<select id="getPersona" resultMap="personaRM">
+		SELECT ID, NOMBRE, APELLIDOS
+			FROM PERSONA
+		WHERE ID=#{idPersona}
+	</select>
+	
+	<select id="getNombrePersonas" resultType="string">
+		SELECT NOMBRE FROM PERSONA
+	</select>
+	
+	<insert id="insertarPersona">
+		<selectKey keyProperty="idPersona" resultType="int" order="BEFORE">
+			SELECT MAX(ID) + 1 FROM PERSONA
+		</selectKey>
+	
+		INSERT INTO PERSONA (ID, NOMBRE, APELLIDOS)
+		VALUES (#{idPersona}, #{persona.nombre}, #{persona.apellidos})
+	</insert>
+
+	<update id="modificarPersona">
+		UPDATE PERSONA SET NOMBRE=#{persona.nombre}, APELLIDOS=#{persona.apellidos}
+			WHERE ID=#{persona.id}
+	</update>
+
+
+
+    <resultMap type="transacciones.spring.mybatis.modelo.Persona" id="personaRM">
+    	<constructor>
+    		<idArg column="id" javaType="integer"/>
+    		<arg column="nombre" javaType="string"/>
+    		<arg column="apellidos" javaType="string"/>
+    	</constructor>
+    </resultMap>
+</mapper>
